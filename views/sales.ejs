@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/styles.css">
+  <title>売上管理ページ</title>
+</head>
+<body>
+  <h1>売上管理ページ</h1>
+  
+  <h2>販売</h2>
+  <form action="/sellProduct/" method="post">
+    <label>商品名：<input type="text" name="name"></label>
+    <label>数量：<input name="amount"></label>
+    <label>価格：<input type="number" name="price"></label>
+    <button type="submit">販売</button>
+  </form>
+  
+  
+  <h2>売上の合計</h2>
+  <form action="/totalSalesAmount/" method="get">
+    <button type="submit">売上の合計を確認する</button>
+  </form>
+  <p><%= totalAmount %></p>
+  
+</body>
+</html>

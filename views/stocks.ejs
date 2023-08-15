@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <title>Stocks</title>
+</head>
+<body>
+  <h1>在庫管理ページ</h1>
+  <h2>データ全消去ボタン</h2>
+<script>
+  $(document).ready(function() {
+    $('form').submit(function(event) {
+      event.preventDefault();
+      $.ajax({
+        url: '/cleanData/',
+        type: 'DELETE',
+        success: function(response) {
+          $('#message').text(response.message);
+        },
+        error: function(error) {
+          console.error(error);
+          $('#message').text('エラーが発生しました');
+        }
+      });
+    });
+  });
+</script>
+
+  <form action="/cleanData" method="post">
+    <button type="submit">全データ消去</button>
+  </form>
+  <h2>データ消去結果</h2>
+  <div id="message"><%= message %></div>
+
+  <h2>在庫更新・作成</h2>
+  <form action="/stocksUpdate" method="post" id="addProduct">
+    <p>
+      <label>商品名：<input type="text" id="name" name="name" placeholder="商品名"></label>
+      <label>数量：<input id="quantity" name="amount" placeholder="数量"></label>
+      <input type="submit" value="追加" >
+    </p>
+  </form>
+  <h2>在庫更新・作成結果</h2>
+  <div id="responseName"><%= responseName %></div>
+  <div id="responseQuantity"><%= responseQuantity %>個</div>
+
+  <h2>在庫確認</h2>
+  <form action="/checkStocks/" method="post" id="checkProduct">
+    <p>
+      <label>商品名：<input type="text" id="name" name="checkName" placeholder="商品名"></label>
+      <input type="submit" value="確認">
+    </p>
+  </form>
+
+  <h2>在庫確認結果</h2>
+  <h3>在庫指定した場合</h3>
+  <div id="checkName"><%= checkName %></div>
+  <div id="checkQuantity"><%= checkQuantity %>個</div>
+  <h3>在庫指定しなかった場合</h3>
+  <script>
+    const tableBody = document.getElementById('tableBody');
+    for (const product of checkAll) {
+      const row = document.createElement('tr');
+      const nameCell = document.createElement('td');
+      const quantityCell = document.createElement('td');
+  
+      nameCell.textContent = product.productname;
+      quantityCell.textContent = product.productquantity;
+  
+      row.appendChild(nameCell);
+      row.appendChild(quantityCell);
+
+      tableBody.appendChild(row);
+    }
+  </script>
+  <table>
+    <tr>
+      <th>商品名</th>
+      <th>数量</th>
+    </tr>
+    <tbody id="tableBody">
+    </tbody>
+  </table>
+</body>
+</html>
